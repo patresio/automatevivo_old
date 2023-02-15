@@ -5,13 +5,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from tqdm import tqdm
-from configDados import cpf, email, senha
-from alterDados import mes_texto, mes_txt, ano_atual, mes_data
-# from backend.Config.alterDados import mes_texto, ano_atual, mes_txt, mes_data
-# from backend.Config.configDados import cpf, email, senha
 import time
 import os
 import shutil
+from decouple import config
+
+
+from alterDados import mes_texto, mes_txt, ano_atual, mes_data
 
 
 class AutomateVivo:
@@ -23,9 +23,9 @@ class AutomateVivo:
         self.PASTA_DOWNLOAD = os.path.join(self.PASTA_LOCAL, 'Download')
         self.SITE_LINK = "https://mve.vivo.com.br/login/cpf"
         self.DADOS_USUARIO = {
-            "cpf": cpf,
-            "email": email,
-            "senha": senha
+            "cpf": config('CPF'),
+            "email": config('EMAIL'),
+            "senha": config('PASSWORD'),
         }
         self.SITE_MAP = {
             "inboxes": {
