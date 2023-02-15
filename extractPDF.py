@@ -2,7 +2,7 @@
 import PyPDF2
 import os
 # My imports
-from backend.alterDados import mes_txt
+from alterDados import mes_txt
 
 pasta_local = os.getcwd()
 nome_pasta_fatura = f'Faturas-{mes_txt}'

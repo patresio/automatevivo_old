@@ -133,3 +133,4 @@ Fatura*
 Download
 .\\Drivers
 *.ini
+.\\\\Drivers/
