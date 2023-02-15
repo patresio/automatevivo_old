@@ -203,63 +203,70 @@ class AutomateVivo:
             if i != 0:
                 self.driver.find_element(By.CLASS_NAME, 'combo_family').click()
 
-            numeroUP = i + 1
+            # Gambiarra 2 para quando o codigo der errado !!!! 
 
-            telefoneLista = self.SITE_MAP["lista"]["ulliTelefones"]["xpath"].replace(
-                "$$NUMEROUP$$", str(numeroUP))
+            #if i <= 65:
+            #    print(numTelefone)
 
-            self.driver.find_element(By.XPATH, telefoneLista).click()
+            else:
 
-            telefoneAtual = self.driver.find_element(
-                By.XPATH, telefoneLista).get_attribute("data-value")
+                numeroUP = i + 1
 
-            try:
-                mesVigencia = self.driver.find_element(By.XPATH,
-                                                       self.SITE_MAP['tabela']['tdmesVigencia']['xpath'])
-                statusPagamento = self.driver.find_element(By.XPATH,
-                                                           self.SITE_MAP['tabela']['tdstatusPagamento']['xpath'])
-                textoPronto = f'O sistema abriu com êxito a linha: {telefoneAtual}. Sendo a fatura em vigor {mesVigencia.text}. Com status {statusPagamento.text}'
-                print(textoPronto)
+                telefoneLista = self.SITE_MAP["lista"]["ulliTelefones"]["xpath"].replace(
+                    "$$NUMEROUP$$", str(numeroUP))
 
-                if statusPagamento.text == "Pendente":
-                    self.driver.find_element(
-                        By.XPATH, self.SITE_MAP['img']['download']['xpath']
-                    ).click()
-                    time.sleep(3)
-                    self.driver.find_element(
-                        By.ID, self.SITE_MAP['hyperlink']['downloadPDF']['id']
-                    ).click()
+                self.driver.find_element(By.XPATH, telefoneLista).click()
 
-                    time.sleep(30)
+                telefoneAtual = self.driver.find_element(
+                    By.XPATH, telefoneLista).get_attribute("data-value")
 
-                    '''
-                        Tratamento do arquivo da fatura baixado
-                        e variaveis utilizadas
-                    '''
+                try:
+                    mesVigencia = self.driver.find_element(By.XPATH,
+                                                        self.SITE_MAP['tabela']['tdmesVigencia']['xpath'])
+                    statusPagamento = self.driver.find_element(By.XPATH,
+                                                            self.SITE_MAP['tabela']['tdstatusPagamento']['xpath'])
+                    textoPronto = f'O sistema abriu com êxito a linha: {telefoneAtual}. Sendo a fatura em vigor {mesVigencia.text}. Com status {statusPagamento.text}'
+                    print(textoPronto)
 
-                    faturaDownload = f'{self.PASTA_DOWNLOAD}/fatura_{mes_texto}{ano_atual}.pdf'
-                    faturaDownloadrename = f'{self.PASTA_DOWNLOAD}/{telefoneAtual}.pdf'
-                    faturaPastaLocal = f'{self.PASTA_LOCAL}/Faturas-{mes_txt}/{telefoneAtual}.pdf'
+                    if statusPagamento.text == "Pendente":
+                        self.driver.find_element(
+                            By.XPATH, self.SITE_MAP['img']['download']['xpath']
+                        ).click()
+                        time.sleep(3)
+                        self.driver.find_element(
+                            By.ID, self.SITE_MAP['hyperlink']['downloadPDF']['id']
+                        ).click()
 
-                    os.rename(faturaDownload, faturaDownloadrename)
+                        time.sleep(30)
 
-                    '''
-                        Movendo para a pasta do sistema
-                    '''
+                        '''
+                            Tratamento do arquivo da fatura baixado
+                            e variaveis utilizadas
+                        '''
 
-                    shutil.move(faturaDownloadrename, faturaPastaLocal)
+                        faturaDownload = f'{self.PASTA_DOWNLOAD}/fatura_{mes_texto}{ano_atual}.pdf'
+                        faturaDownloadrename = f'{self.PASTA_DOWNLOAD}/{telefoneAtual}.pdf'
+                        faturaPastaLocal = f'{self.PASTA_LOCAL}/Faturas-{mes_txt}/{telefoneAtual}.pdf'
+
+                        os.rename(faturaDownload, faturaDownloadrename)
+
+                        '''
+                            Movendo para a pasta do sistema
+                        '''
+
+                        shutil.move(faturaDownloadrename, faturaPastaLocal)
+                        print(
+                            f'O sistema renomeou e moveu a fatura da linha {telefoneAtual} com sucesso')
+
+                        # return telefoneAtual
+
+                except NoSuchElementException:
                     print(
-                        f'O sistema renomeou e moveu a fatura da linha {telefoneAtual} com sucesso')
+                        f'A fatura do telefone: {telefoneAtual} apresentou problemas')
 
-                    # return telefoneAtual
+                    # return None
 
-            except NoSuchElementException:
-                print(
-                    f'A fatura do telefone: {telefoneAtual} apresentou problemas')
-
-                # return None
-
-            time.sleep(10)
+                time.sleep(10)
 
         self.driver.quit()
 
