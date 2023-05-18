@@ -67,7 +67,7 @@ class AutomateVivo:
 
             "hyperlink": {
                 "linkFixaCorporativa": {
-                    "xpath": "/html/body/header/div/div/div[1]/div[1]/div/div/ul/li[2]"
+                    "xpath": "/html/body/div[1]/header/div/div/div[1]/div[1]/div/div[2]/ul/li[2]"
                 },
 
                 "downloadPDF": {
@@ -153,24 +153,26 @@ class AutomateVivo:
         self.driver.find_element(
             By.XPATH, self.SITE_MAP['inboxes']['cpfInbox']['xpath']).send_keys(
                 self.DADOS_USUARIO['cpf'], Keys.ENTER)
-        time.sleep(30)
+        time.sleep(15)
 
         # Parte do EMAIL
         self.driver.find_element(
             By.XPATH, self.SITE_MAP['inboxes']['emailInbox']['xpath']).send_keys(
                 self.DADOS_USUARIO['email'], Keys.ENTER)
-        time.sleep(30)
+        time.sleep(15)
 
         # Parte do Senha
         self.driver.find_element(
             By.XPATH, self.SITE_MAP['inboxes']['senhaInbox']['xpath']).send_keys(
                 self.DADOS_USUARIO['senha'], Keys.ENTER)
-        time.sleep(30)
+        time.sleep(15)
 
     def clicaLinkFaturas(self):
+        print('clica')
         self.driver.find_element(
             By.XPATH, self.SITE_MAP['hyperlink']['linkFixaCorporativa']['xpath']).click()
-        time.sleep(60)
+        print('clicou na fatura')
+        time.sleep(30)
 
     def trocaPagina(self):
         self.aba_pai = self.driver.current_window_handle
@@ -205,8 +207,8 @@ class AutomateVivo:
 
             # Gambiarra 2 para quando o codigo der errado !!!! 
 
-            #if i <= 65:
-            #    print(numTelefone)
+            if i < 0:
+                print(numTelefone)
 
             else:
 
@@ -237,7 +239,7 @@ class AutomateVivo:
                             By.ID, self.SITE_MAP['hyperlink']['downloadPDF']['id']
                         ).click()
 
-                        time.sleep(30)
+                        time.sleep(20)
 
                         '''
                             Tratamento do arquivo da fatura baixado
