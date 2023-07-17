@@ -150,10 +150,10 @@ class AutomateVivo:
     def logarSite(self):
         self.abrirSite()
         # Parte do CPF
-        self.driver.find_element(
+        """ self.driver.find_element(
             By.XPATH, self.SITE_MAP['inboxes']['cpfInbox']['xpath']).send_keys(
                 self.DADOS_USUARIO['cpf'], Keys.ENTER)
-        time.sleep(15)
+        time.sleep(15) """
 
         # Parte do EMAIL
         self.driver.find_element(
@@ -168,10 +168,8 @@ class AutomateVivo:
         time.sleep(15)
 
     def clicaLinkFaturas(self):
-        print('clica')
         self.driver.find_element(
             By.XPATH, self.SITE_MAP['hyperlink']['linkFixaCorporativa']['xpath']).click()
-        print('clicou na fatura')
         time.sleep(30)
 
     def trocaPagina(self):
@@ -205,10 +203,10 @@ class AutomateVivo:
             if i != 0:
                 self.driver.find_element(By.CLASS_NAME, 'combo_family').click()
 
-            # Gambiarra 2 para quando o codigo der errado !!!! 
+            # Gambiarra 2 para quando o codigo der errado !!!! entou problemas
 
-            if i < 0:
-                print(numTelefone)
+            #if i < 76:
+            #    print(numTelefone)
 
             else:
 
