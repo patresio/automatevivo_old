@@ -100,8 +100,9 @@ class AutomateVivo:
 
         }
 
-        servico = Service(ChromeDriverManager(
+        servico = Service(ChromeDriverManager(version="114.0.5735.90",
             path=r".\\Drivers").install())
+        #servico = Service(executable_path='./chromedriver/chromedriver')
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument("--disable-infobars")
         self.chrome_options.add_argument("--disable-logging")
@@ -198,23 +199,21 @@ class AutomateVivo:
 
         for i, numTelefone in enumerate(self.telefoneListados):
             pbar.update()
-
+            print(i)
             # Gambiarra no código
             if i != 0:
                 self.driver.find_element(By.CLASS_NAME, 'combo_family').click()
-
+                print('primeiro click!')
             # Gambiarra 2 para quando o codigo der errado !!!! entou problemas
-
-            #if i < 76:
-            #    print(numTelefone)
-
+            if i < 45:
+                print(numTelefone)
+                print('Pulou aqui!')
             else:
-
+                print('tentando entrar no loop!')
                 numeroUP = i + 1
-
                 telefoneLista = self.SITE_MAP["lista"]["ulliTelefones"]["xpath"].replace(
                     "$$NUMEROUP$$", str(numeroUP))
-
+                print(telefoneLista)
                 self.driver.find_element(By.XPATH, telefoneLista).click()
 
                 telefoneAtual = self.driver.find_element(
@@ -222,9 +221,9 @@ class AutomateVivo:
 
                 try:
                     mesVigencia = self.driver.find_element(By.XPATH,
-                                                        self.SITE_MAP['tabela']['tdmesVigencia']['xpath'])
+                                                           self.SITE_MAP['tabela']['tdmesVigencia']['xpath'])
                     statusPagamento = self.driver.find_element(By.XPATH,
-                                                            self.SITE_MAP['tabela']['tdstatusPagamento']['xpath'])
+                                                               self.SITE_MAP['tabela']['tdstatusPagamento']['xpath'])
                     textoPronto = f'O sistema abriu com êxito a linha: {telefoneAtual}. Sendo a fatura em vigor {mesVigencia.text}. Com status {statusPagamento.text}'
                     print(textoPronto)
 
@@ -258,7 +257,7 @@ class AutomateVivo:
                         print(
                             f'O sistema renomeou e moveu a fatura da linha {telefoneAtual} com sucesso')
 
-                        # return telefoneAtual
+                        print('refaz o processo todo')
 
                 except NoSuchElementException:
                     print(
@@ -274,3 +273,7 @@ class AutomateVivo:
         self.logarSite()
         self.clicaLinkFaturas()
         self.downloadFaturas()
+
+
+fatura = AutomateVivo()
+fatura.FuncionaBiribinha()
