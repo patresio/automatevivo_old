@@ -203,13 +203,13 @@ class AutomateVivo:
             # Gambiarra no código
             if i != 0:
                 self.driver.find_element(By.CLASS_NAME, 'combo_family').click()
-                print('primeiro click!')
+                print('Primeiro click!')
             # Gambiarra 2 para quando o codigo der errado !!!! entou problemas
-            if i < 45:
+            if i < 46:
                 print(numTelefone)
                 print('Pulou aqui!')
             else:
-                print('tentando entrar no loop!')
+                #print('tentando entrar no loop!')
                 numeroUP = i + 1
                 telefoneLista = self.SITE_MAP["lista"]["ulliTelefones"]["xpath"].replace(
                     "$$NUMEROUP$$", str(numeroUP))
