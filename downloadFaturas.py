@@ -1,3 +1,4 @@
+import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -79,6 +80,7 @@ class AutomateVivo:
             "lista": {
                 "ulliTelefones": {
                     "xpath": "/html/body/div[1]/div/div[2]/div/div[1]/div[2]/div[3]/div/div/form/ul/li[$$NUMEROUP$$]/a/span[1]"
+                    #         /html/body/div[1]/div/div[2]/div/div[1]/div[2]/div[3]/div/div/form/ul/li[$$NUMEROUP$$]/a/span[1]
                 }
             },
 
@@ -100,11 +102,13 @@ class AutomateVivo:
 
         }
 
-        servico = Service(ChromeDriverManager(version="114.0.5735.90",
-            path=r".\\Drivers").install())
-        #servico = Service(executable_path='./chromedriver/chromedriver')
-        self.chrome_options = webdriver.ChromeOptions()
+        # servico = Service(ChromeDriverManager(version="114.0.5735.90", path=r".\\Drivers").install())
+        # servico = Service(executable_path='chromedriver')
+        # uc.install(executable_path='./chromedriver')
+        # self.chrome_options = webdriver.ChromeOptions()
+        self.chrome_options = uc.ChromeOptions()
         self.chrome_options.add_argument("--disable-infobars")
+        # self.chrome_options.add_argument("--headless")
         self.chrome_options.add_argument("--disable-logging")
         self.chrome_options.add_argument("--disable-notifications")
         self.chrome_options.add_argument("--disable-default-apps")
@@ -113,8 +117,7 @@ class AutomateVivo:
         prefs = {"download.default_directory": self.PASTA_DOWNLOAD,
                  "safebrowsing.enabled": "false"}
         self.chrome_options.add_experimental_option("prefs", prefs)
-        self.driver = webdriver.Chrome(
-            service=servico, chrome_options=self.chrome_options)
+        self.driver = uc.Chrome(options=self.chrome_options)
 
         self.driver.implicitly_wait(20)
 
@@ -205,11 +208,20 @@ class AutomateVivo:
                 self.driver.find_element(By.CLASS_NAME, 'combo_family').click()
                 print('Primeiro click!')
             # Gambiarra 2 para quando o codigo der errado !!!! entou problemas
-            if i < 46:
-                print(numTelefone)
-                print('Pulou aqui!')
+            if i < 0:
+                if i == 0:
+                    telefoneLista = self.SITE_MAP["lista"]["ulliTelefones"]["xpath"].replace(
+                        "$$NUMEROUP$$", str(numeroUP))
+                    print(telefoneLista)
+                    telefonetexto = self.driver.find_element(
+                        By.XPATH, telefoneLista).text()
+                    print(telefonetexto)
+                    self.driver.find_element(By.XPATH, telefoneLista).click()
+                else:
+                    print('Vou só pular!')
+
             else:
-                #print('tentando entrar no loop!')
+                print('tentando entrar no loop!')
                 numeroUP = i + 1
                 telefoneLista = self.SITE_MAP["lista"]["ulliTelefones"]["xpath"].replace(
                     "$$NUMEROUP$$", str(numeroUP))
