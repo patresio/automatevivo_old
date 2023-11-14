@@ -1,18 +1,18 @@
-import undetected_chromedriver as uc
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
-from tqdm import tqdm
-import time
 import os
 import shutil
+import time
+
+import undetected_chromedriver as uc
 from decouple import config
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from tqdm import tqdm
+from webdriver_manager.chrome import ChromeDriverManager
 
-
-from alterDados import mes_texto, mes_txt, ano_atual, mes_data
+from alterDados import ano_atual, mes_data, mes_texto, mes_txt
 
 
 class AutomateVivo:
@@ -102,22 +102,21 @@ class AutomateVivo:
 
         }
 
-        # servico = Service(ChromeDriverManager(version="114.0.5735.90", path=r".\\Drivers").install())
-        # servico = Service(executable_path='chromedriver')
-        # uc.install(executable_path='./chromedriver')
-        # self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options = uc.ChromeOptions()
         self.chrome_options.add_argument("--disable-infobars")
-        # self.chrome_options.add_argument("--headless")
+        self.chrome_options.headless = False
         self.chrome_options.add_argument("--disable-logging")
+        self.chrome_options.add_argument("--incognito")
         self.chrome_options.add_argument("--disable-notifications")
         self.chrome_options.add_argument("--disable-default-apps")
         self.chrome_options.add_argument("--disable-extensions")
-        self.chrome_options.add_argument("--start-maximized")
+        self.chrome_options.add_argument("--no-sandbox")
+        self.chrome_options.add_argument("--window-size=1920,1080")
         prefs = {"download.default_directory": self.PASTA_DOWNLOAD,
                  "safebrowsing.enabled": "false"}
         self.chrome_options.add_experimental_option("prefs", prefs)
-        self.driver = uc.Chrome(options=self.chrome_options)
+        self.driver = uc.Chrome(headless=False,
+                                options=self.chrome_options, service=ChromeService(ChromeDriverManager().install()), use_subprocess=True)
 
         self.driver.implicitly_wait(20)
 
@@ -126,7 +125,7 @@ class AutomateVivo:
     def criaPastaFaturas(self):
         self.namePathFatura = f'Faturas-{mes_txt}'
         if os.path.isdir(self.namePathFatura):
-            print(f'Pasta do mês: {mes_data} já exite')
+            print(f'Pasta do mês: {mes_data} já existe')
         else:
             os.mkdir(self.namePathFatura)
             print(f'A pasta do mês: {mes_data} foi criada')
@@ -154,10 +153,10 @@ class AutomateVivo:
     def logarSite(self):
         self.abrirSite()
         # Parte do CPF
-        """ self.driver.find_element(
-            By.XPATH, self.SITE_MAP['inboxes']['cpfInbox']['xpath']).send_keys(
-                self.DADOS_USUARIO['cpf'], Keys.ENTER)
-        time.sleep(15) """
+        # """ self.driver.find_element(
+        #     By.XPATH, self.SITE_MAP['inboxes']['cpfInbox']['xpath']).send_keys(
+        #         self.DADOS_USUARIO['cpf'], Keys.ENTER)
+        # time.sleep(15) """
 
         # Parte do EMAIL
         self.driver.find_element(
